@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           # Full history is load-bearing: changed-file steps diff against the
           # PR base and the ESLint regression gate reads the base ref's
@@ -81,7 +81,7 @@ jobs:
               - '!**.md'
 
       - name: Set up Node.js 24.16.0
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.16.0'
           cache: npm
@@ -214,7 +214,7 @@ jobs:
         if: always() && steps.paths.outputs.config == 'true'
         id: cache-data-provider
         continue-on-error: true
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-provider/dist
           key: build-data-provider-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -229,7 +229,7 @@ jobs:
         if: always() && steps.paths.outputs.config == 'true'
         id: cache-data-schemas
         continue-on-error: true
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-schemas/dist
           key: build-data-schemas-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -244,7 +244,7 @@ jobs:
         if: always() && steps.paths.outputs.config == 'true'
         id: cache-api
         continue-on-error: true
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/api/dist
           key: build-api-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/api/src/**', 'packages/api/tsconfig*.json', 'packages/api/tsdown.config.mjs', 'packages/api/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json') }}
@@ -728,7 +728,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           # fetch-depth: 0 is load-bearing — the gate reads the base ref's
           # config via `git show`, which a shallow checkout cannot resolve.
@@ -746,7 +746,7 @@ jobs:
 
       - name: Set up Node.js 24.16.0
         if: steps.paths.outputs.eslint_config == 'true'
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.16.0'
           cache: npm

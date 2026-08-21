@@ -43,7 +43,7 @@ jobs:
       E2E_CHROMIUM_CHANNEL: chrome
       E2E_STREAM_STORE: memory
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Ask codegraph for this merge's skippable tier
         id: tiers
@@ -84,14 +84,14 @@ jobs:
 
       - name: Use Node.js 24.16.0
         if: steps.tiers.outputs.count != '0'
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.16.0'
 
       - name: Restore node_modules cache
         if: steps.tiers.outputs.count != '0'
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -110,7 +110,7 @@ jobs:
       - name: Restore data-provider build cache
         if: steps.tiers.outputs.count != '0'
         id: cache-data-provider
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-provider/dist
           key: build-data-provider-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -122,7 +122,7 @@ jobs:
       - name: Restore data-schemas build cache
         if: steps.tiers.outputs.count != '0'
         id: cache-data-schemas
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-schemas/dist
           key: build-data-schemas-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -134,7 +134,7 @@ jobs:
       - name: Restore api build cache
         if: steps.tiers.outputs.count != '0'
         id: cache-api
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/api/dist
           key: build-api-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/api/src/**', 'packages/api/tsconfig*.json', 'packages/api/tsdown.config.mjs', 'packages/api/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json') }}
@@ -146,7 +146,7 @@ jobs:
       - name: Restore client-package build cache
         if: steps.tiers.outputs.count != '0'
         id: cache-client-package
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/client/dist
           key: build-client-package-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/client/src/**', 'packages/client/tsconfig*.json', 'packages/client/tsdown.config.mjs', 'packages/client/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -158,7 +158,7 @@ jobs:
       - name: Restore client app build cache
         if: steps.tiers.outputs.count != '0'
         id: cache-client-app
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: client/dist
           key: build-client-app-e2e-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'client/src/**', 'client/public/**', 'client/scripts/post-build.cjs', 'client/index.html', 'client/package.json', 'client/vite.config.*', 'client/tsconfig*.json', 'client/tailwind.config.*', 'client/postcss.config.*', 'packages/client/src/**', 'packages/client/tailwind.preset.cjs', 'packages/client/tsconfig*.json', 'packages/client/tsdown.config.mjs', 'packages/client/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
