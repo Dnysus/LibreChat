@@ -11,7 +11,6 @@ updates:
     schedule:
       interval: 'weekly'
       day: 'monday'
-    open-pull-requests-limit: 15
     versioning-strategy: 'increase'
     labels:
       - 'dependencies'
@@ -69,6 +68,7 @@ updates:
         patterns:
           - '*'
         update-types:
+          - 'major'
           - 'minor'
           - 'patch'
 
@@ -105,7 +105,7 @@ updates:
     ignore:
       # Node major bumps are deliberate — the repo pins Node 24.x
       - dependency-name: 'node'
-        update-types: ['version-update:semver-major']
+        update-types: ['version-update:semver-major','version-update:semver-minor','version-update:semver-patch']
 
   # Pinned service images (mongo, meilisearch, pgvector) in compose files.
   # Only standard filenames are scanned — deploy-compose.yml / rag.yml are not.
@@ -138,6 +138,7 @@ updates:
         patterns:
           - '*'
         update-types:
+          - 'major'
           - 'minor'
           - 'patch'
 
