@@ -55,7 +55,7 @@ services:
       - SESSION_COOKIE_SECURE=${ADMIN_PANEL_SESSION_COOKIE_SECURE:-false}
   mongodb:
     container_name: chat-mongodb
-    image: mongo:8.0.20
+    image: mongo:8.2.12
     restart: always
     user: "${UID}:${GID}"
     volumes:

@@ -73,7 +73,7 @@ services:
     container_name: chat-mongodb
     # ports:  # Uncomment this to access mongodb from outside docker, not safe in deployment
     #   - 27018:27017
-    image: mongo:8.0.20
+    image: mongo:8.2.12
     restart: always
     volumes:
       - ./data-node:/data/db
