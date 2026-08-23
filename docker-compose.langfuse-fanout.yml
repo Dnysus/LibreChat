@@ -41,7 +41,7 @@ services:
       - langfuse-fanout
 
   langfuse-fanout-redis:
-    image: redis:8.0-alpine
+    image: redis:8.10-alpine
     restart: always
     expose:
       - '6379'
