@@ -1,0 +1,153 @@
+# Dependabot configuration for LibreChat
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # npm monorepo — the root package-lock.json covers all workspaces
+  # (api/, client/, packages/*). The react-query stub keeps its own lockfile.
+  - package-ecosystem: 'npm'
+    directories:
+      - '/'
+      - '/packages/data-provider/react-query'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    open-pull-requests-limit: 15
+    versioning-strategy: 'increase'
+    labels:
+      - 'dependencies'
+      - 'npm'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    groups:
+      # A dependency joins the first group it matches, so keep the
+      # catch-all group last.
+      aws-sdk:
+        patterns:
+          - '@aws-sdk/*'
+          - '@smithy/*'
+      azure:
+        patterns:
+          - '@azure/*'
+          - '@microsoft/*'
+      opentelemetry:
+        patterns:
+          - '@opentelemetry/*'
+      langchain:
+        patterns:
+          - '@langchain/*'
+          - 'langchain*'
+      ai-sdks:
+        patterns:
+          - 'openai'
+          - 'ollama'
+          - '@google/genai'
+          - '@anthropic-ai/*'
+          - '@librechat/agents'
+          - '@modelcontextprotocol/*'
+      radix-ui:
+        patterns:
+          - '@radix-ui/*'
+      tanstack:
+        patterns:
+          - '@tanstack/*'
+      lint-and-format:
+        patterns:
+          - 'eslint*'
+          - '@eslint/*'
+          - '@typescript-eslint/*'
+          - 'prettier*'
+      testing:
+        patterns:
+          - 'jest*'
+          - '@jest/*'
+          - 'playwright*'
+          - '@playwright/*'
+          - '@testing-library/*'
+          - 'mongodb-memory-server'
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # GitHub Actions used across .github/workflows
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+    commit-message:
+      prefix: 'ci'
+    groups:
+      actions:
+        patterns:
+          - '*'
+
+  # Dockerfile + Dockerfile.multi (root), Go fanout image, devcontainer image
+  - package-ecosystem: 'docker'
+    directories:
+      - '/'
+      - '/otel/langfuse-fanout'
+      - '/.devcontainer'
+    schedule:
+      interval: 'weekly'
+      day: 'wednesday'
+    labels:
+      - 'dependencies'
+      - 'docker'
+    commit-message:
+      prefix: 'chore'
+    ignore:
+      # Node major bumps are deliberate — the repo pins Node 24.x
+      - dependency-name: 'node'
+        update-types: ['version-update:semver-major']
+
+  # Pinned service images (mongo, meilisearch, pgvector) in compose files.
+  # Only standard filenames are scanned — deploy-compose.yml / rag.yml are not.
+  - package-ecosystem: 'docker-compose'
+    directories:
+      - '/'
+      - '/.devcontainer'
+    schedule:
+      interval: 'weekly'
+      day: 'wednesday'
+    labels:
+      - 'dependencies'
+      - 'docker'
+    commit-message:
+      prefix: 'chore'
+
+  # Go module for the OTEL Langfuse fanout service
+  - package-ecosystem: 'gomod'
+    directory: '/otel/langfuse-fanout'
+    schedule:
+      interval: 'weekly'
+      day: 'thursday'
+    labels:
+      - 'dependencies'
+      - 'go'
+    commit-message:
+      prefix: 'chore'
+    groups:
+      go-minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Dev container features (.devcontainer/devcontainer.json)
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+    labels:
+      - 'dependencies'
+    commit-message:
+      prefix: 'chore'
