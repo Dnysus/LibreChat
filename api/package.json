@@ -137,8 +137,8 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.5",
     "@types/sanitize-html": "^2.16.1",
-    "jest": "^30.2.0",
-    "mongodb-memory-server": "^11.0.1",
+    "jest": "^30.5.0",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
     "supertest": "^7.1.0"
   }
