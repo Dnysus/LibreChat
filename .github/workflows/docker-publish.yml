@@ -66,7 +66,7 @@ jobs:
       # build leg of a run checks out the same immutable commit even if the
       # branch advances mid-run.
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.checkout_ref || github.sha }}
 
@@ -139,7 +139,7 @@ jobs:
       # `lc-dev` / `lc-dev-api`), and a bare `digests-<image>-*` pattern matches
       # both, which is exactly the failure in #15446.
       - name: Upload digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: digests-${{ matrix.image.image_name }}-arch-${{ matrix.arch }}
           path: /tmp/digests/*
@@ -164,7 +164,7 @@ jobs:
 
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: digests-${{ matrix.image.image_name }}-arch-*
           merge-multiple: true
