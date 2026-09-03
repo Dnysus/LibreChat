@@ -48,7 +48,7 @@ services:
     command: mongod --noauth
   meilisearch:
     container_name: chat-meilisearch
-    image: getmeili/meilisearch:v1.5
+    image: getmeili/meilisearch:v1.53
     # restart: always
     expose:
       - 7700
