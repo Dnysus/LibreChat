@@ -29,8 +29,8 @@ jobs:
     env:
       E2E_CHROMIUM_CHANNEL: chrome
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.16.0'
           cache: npm
@@ -61,7 +61,7 @@ jobs:
           gh pr comment "$PR_NUMBER" --body-file lighthouse-comment.md
       - name: Upload Lighthouse reports
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse
           path: |
