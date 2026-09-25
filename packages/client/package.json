@@ -82,7 +82,7 @@
     "lucide-react": "^0.525.0 || ^0.528.0",
     "match-sorter": "^8.1.0",
     "morphicons": "^1.4.1",
-    "rc-input-number": "^7.4.2",
+    "rc-input-number": "^9.5.0",
     "react": "^18.2.0 || ^19.1.0",
     "react-dom": "^18.2.0 || ^19.1.0",
     "react-hook-form": "^7.56.4",
