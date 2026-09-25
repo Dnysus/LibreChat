@@ -45,6 +45,19 @@ describe('Experimental server configuration', () => {
     expect(source.match(/initializeScheduleErasureSweep\(\);/g)).toHaveLength(1);
   });
 
+  it('starts code-environment lifecycle reconciliation after Mongo connects in each worker', () => {
+    const connectIndex = source.indexOf('await connectDb();');
+    const reconcileIndex = source.indexOf('startCodeEnvironmentLifecycleReconciler({ mongoose });');
+    const listenIndex = source.indexOf('const server = app.listen');
+
+    expect(connectIndex).toBeGreaterThan(-1);
+    expect(reconcileIndex).toBeGreaterThan(connectIndex);
+    expect(listenIndex).toBeGreaterThan(reconcileIndex);
+    expect(
+      source.match(/startCodeEnvironmentLifecycleReconciler\(\{ mongoose \}\);/g),
+    ).toHaveLength(1);
+  });
+
   it('never arms the full schedule engine in a clustered worker', () => {
     // The clustered entrypoint runs erasure-only maintenance: arming the engine here
     // would claim/fire/absence-reconcile runs whose peer generations it cannot see.
@@ -80,6 +93,19 @@ describe('Experimental server configuration', () => {
     expect(baseConfigIndex).toBeGreaterThan(-1);
     expect(eventRuntimeIndex).toBeGreaterThan(baseConfigIndex);
     expect(listenIndex).toBeGreaterThan(eventRuntimeIndex);
+  });
+
+  it('passes the same idle recovery policy to both server startup paths', () => {
+    const standard = fs.readFileSync(path.join(__dirname, 'index.js'), 'utf8');
+    for (const [entrypoint, config] of [
+      [source, 'baseAppConfig'],
+      [standard, 'appConfig'],
+    ]) {
+      const start = entrypoint.indexOf('await initializeAgentTriggerService({');
+      expect(start).toBeGreaterThan(-1);
+      const call = entrypoint.slice(start, entrypoint.indexOf('});', start));
+      expect(call).toContain(`idlePolling: ${config}?.endpoints?.agents?.eventDriven?.idlePolling`);
+    }
   });
 
   it('matches the standard server pre-authentication tenant routes', () => {
