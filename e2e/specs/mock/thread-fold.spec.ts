@@ -9,6 +9,7 @@ import {
   selectMockEndpoint,
   sendMessage,
 } from './helpers';
+import { sendCompactionHistory } from './compaction.helpers';
 
 /**
  * Regression suite for the "folded thread" incident (PR: order-robust message
@@ -92,7 +93,9 @@ test.describe('thread fold regressions', () => {
 
     /** Queue mid-run, then escalate to an interrupt: the closest scripted
      *  reproduction of the incident's preempt churn (mid-stream seal, new
-     *  generation, resume-path cache writes). */
+     *  generation, resume-path cache writes). Enter takes the default
+     *  during-run action, which is steer; Ctrl/Cmd+Enter takes the other one,
+     *  which is what queues the message this test needs. */
     const input = messageInput(page);
     await input.click();
     await input.fill(interruptText);
@@ -190,6 +193,65 @@ test.describe('thread fold regressions', () => {
     await expect(siblingCounter(page)).toHaveText('2 / 2');
   });
 
+  /** A manual compaction is a new assistant turn under the current leaf, not a
+   *  regenerated sibling of that leaf. Keep the summarizer open long enough to
+   *  assert the live tree: the complete transcript stays visible and no sibling
+   *  navigation appears beside the "Summarizing..." row. */
+  test('a live manual compaction stays below the turn it summarizes', async ({ page, request }) => {
+    test.setTimeout(120000);
+    const label = uniqueLabel('fold-live-compact');
+    const setupPrompt = replyPrompt(`${label}-setup`);
+    const setupReply = replyText(`${label}-setup`);
+    const latestPrompt = replyPrompt(`${label}-latest`);
+    const latestReply = replyText(`${label}-latest`);
+
+    await openMockChat(page);
+    const olderHistory = await sendCompactionHistory(page, label, 1);
+    await sendAndExpectReply(page, setupPrompt, setupReply);
+    await sendAndExpectReply(page, latestPrompt, latestReply);
+    await expect(page).toHaveURL(/\/c\/[0-9a-fA-F-]{36}$/, { timeout: 15000 });
+
+    const behavior = await request.post(`${LABEL_SERVER}/__e2e/behavior`, {
+      data: { delayMs: 10000 },
+    });
+    expect(behavior.ok()).toBeTruthy();
+
+    await page.getByTestId('token-usage').click();
+    await page.getByRole('button', { name: 'Compact context' }).click();
+
+    await expect(messagesView(page).getByText('Summarizing...')).toBeVisible({ timeout: 30000 });
+    for (const text of olderHistory) {
+      await expect(messagesView(page).getByText(text, { exact: true })).toBeVisible();
+    }
+    await expect(messagesView(page).getByText(setupPrompt)).toBeVisible();
+    await expect(messagesView(page).getByText(setupReply)).toBeVisible();
+    await expect(messagesView(page).getByText(latestPrompt)).toBeVisible();
+    await expect(messagesView(page).getByText(latestReply)).toBeVisible();
+    await expect(messageTurns(page)).toHaveCount(7);
+    await expect(messageTurns(page).nth(5)).toContainText(latestReply);
+    await expect(messageTurns(page).nth(6)).toContainText('Summarizing...');
+    await expect(page.getByRole('navigation', { name: 'Sibling message navigation' })).toHaveCount(
+      0,
+    );
+
+    await expect(messagesView(page).getByText('You compacted the context')).toBeVisible({
+      timeout: 60000,
+    });
+    for (const text of olderHistory) {
+      await expect(messagesView(page).getByText(text, { exact: true })).toBeVisible();
+    }
+    await expect(messagesView(page).getByText(setupPrompt)).toBeVisible();
+    await expect(messagesView(page).getByText(setupReply)).toBeVisible();
+    await expect(messagesView(page).getByText(latestPrompt)).toBeVisible();
+    await expect(messagesView(page).getByText(latestReply)).toBeVisible();
+    await expect(messageTurns(page)).toHaveCount(7);
+    await expect(messageTurns(page).nth(5)).toContainText(latestReply);
+    await expect(messageTurns(page).nth(6)).toContainText('You compacted the context');
+    await expect(page.getByRole('navigation', { name: 'Sibling message navigation' })).toHaveCount(
+      0,
+    );
+  });
+
   /**
    * A manual compaction submits no user turn: it hangs a summarize-only response
    * off the branch's leaf and puts that leaf in the submission's user-message
@@ -209,6 +271,7 @@ test.describe('thread fold regressions', () => {
     const setupReply = replyText(label);
 
     await openMockChat(page);
+    const olderHistory = await sendCompactionHistory(page, label);
     await sendAndExpectReply(page, setupPrompt, setupReply);
     await expect(page).toHaveURL(/\/c\/[0-9a-fA-F-]{36}$/, { timeout: 15000 });
 
@@ -230,6 +293,11 @@ test.describe('thread fold regressions', () => {
     /** The turn under compaction is still the answer it always was, on the one
      *  branch the conversation has — a rewritten anchor would strand both rows
      *  behind a phantom root and offer a sibling switcher to page back to them. */
+    for (const text of olderHistory) {
+      await expect(messagesView(page).getByText(text, { exact: true })).toBeVisible({
+        timeout: 30000,
+      });
+    }
     await expect(messagesView(page).getByText(setupPrompt)).toBeVisible({ timeout: 30000 });
     await expect(messagesView(page).getByText(setupReply)).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Sibling message navigation' })).toHaveCount(
@@ -240,9 +308,14 @@ test.describe('thread fold regressions', () => {
     await expect(messagesView(page).getByText('You compacted the context')).toBeVisible({
       timeout: 60000,
     });
+    for (const text of olderHistory) {
+      await expect(messagesView(page).getByText(text, { exact: true })).toBeVisible();
+    }
     await expect(messagesView(page).getByText(setupPrompt)).toBeVisible();
     await expect(messagesView(page).getByText(setupReply)).toBeVisible();
-    await expect(messageTurns(page)).toHaveCount(3);
+    await expect(messageTurns(page)).toHaveCount(7);
+    await expect(messageTurns(page).nth(5)).toContainText(setupReply);
+    await expect(messageTurns(page).nth(6)).toContainText('You compacted the context');
     await expect(page.getByRole('navigation', { name: 'Sibling message navigation' })).toHaveCount(
       0,
     );
