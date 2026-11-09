@@ -69,7 +69,7 @@
     "winston": "^3.17.0"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^4.28.0"
+    "@tanstack/react-query": "^5.106.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
