@@ -64,7 +64,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.5",
     "@babel/preset-typescript": "^7.21.0",
-    "@langchain/langgraph": "^1.4.5",
+    "@langchain/langgraph": "^1.7.2",
     "@types/bun": "^1.2.15",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.2",
@@ -172,8 +172,8 @@
     "zod-to-json-schema": "^3.25.1"
   },
   "dependencies": {
-    "@langchain/langgraph-checkpoint": "^1.1.2",
-    "@langchain/langgraph-checkpoint-mongodb": "^1.4.0",
+    "@langchain/langgraph-checkpoint": "^1.2.2",
+    "@langchain/langgraph-checkpoint-mongodb": "^1.5.1",
     "@librechat/code": "file:../../vendor/code",
     "@simplewebauthn/server": "^13.3.2",
     "cluster-key-slot": "^1.1.2",
