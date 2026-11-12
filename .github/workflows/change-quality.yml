@@ -95,12 +95,12 @@ jobs:
       check: ${{ steps.request.outputs.check }}
       static: ${{ steps.request.outputs.static }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: scripts/quality
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
       - id: request
@@ -115,11 +115,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
           cache: npm
@@ -148,12 +148,12 @@ jobs:
       hasChanges: ${{ steps.select.outputs.hasChanges }}
       postgresChanged: ${{ steps.postgres.outputs.changed }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
       - name: Fetch requested commits
@@ -197,11 +197,11 @@ jobs:
       PG_TEST_URL: postgresql://postgres@127.0.0.1:5432/postgres
       NODE_OPTIONS: --max-old-space-size=6144
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.QUALITY_HEAD }}
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
           cache: npm
@@ -253,14 +253,14 @@ jobs:
       REDIS_URI: redis://127.0.0.1:6379
       NODE_OPTIONS: --max-old-space-size=6144
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.QUALITY_HEAD }}
           path: source
           fetch-depth: 0
           persist-credentials: false
       - name: Check out quality tooling
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           path: tooling
@@ -281,7 +281,7 @@ jobs:
           done
           docker logs quality-redis-cluster
           exit 1
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
           cache: npm
@@ -321,7 +321,7 @@ jobs:
       - name: Upload reports
         if: always()
         timeout-minutes: 3
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: change-${{ matrix.task.check }}-${{ matrix.workspace }}-${{ env.QUALITY_HEAD }}${{ matrix.task.check == 'mutation' && format('-shard-{0}', matrix.task.shard) || '' }}
           path: source/coverage/changes/${{ matrix.workspace }}/${{ matrix.task.check }}${{ matrix.task.check == 'mutation' && format('-{0}', matrix.task.shard) || '' }}/
@@ -346,16 +346,16 @@ jobs:
       matrix:
         workspace: ${{ fromJSON(needs.select.outputs.mutationWorkspaces) }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           pattern: change-mutation-${{ matrix.workspace }}-${{ env.QUALITY_HEAD }}-shard-*
           path: coverage/shards
@@ -367,7 +367,7 @@ jobs:
           --workspace "$QUALITY_WORKSPACE"
           --head "$QUALITY_HEAD"
           --prefix "change-mutation-$QUALITY_WORKSPACE-$QUALITY_HEAD-"
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         timeout-minutes: 3
         with:
@@ -393,12 +393,12 @@ jobs:
       pull-requests: write
       statuses: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: scripts/quality
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
       - env:

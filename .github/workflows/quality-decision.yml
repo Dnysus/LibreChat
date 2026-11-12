@@ -47,12 +47,12 @@ jobs:
     timeout-minutes: 5
     steps:
       # Never check out the PR or download its artifacts in this privileged job.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.workflow_sha }}
           persist-credentials: false
           sparse-checkout: scripts/quality
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
       - env:
@@ -74,12 +74,12 @@ jobs:
       group: quality-queue-${{ github.event.workflow_run.head_sha }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.workflow_sha }}
           persist-credentials: false
           sparse-checkout: scripts/quality
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.1'
       - env:
