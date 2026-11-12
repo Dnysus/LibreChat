@@ -75,16 +75,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -100,7 +100,7 @@ jobs:
 
       - name: Restore data-provider build cache
         id: cache-data-provider
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-provider/dist
           key: build-data-provider-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -111,7 +111,7 @@ jobs:
 
       - name: Restore data-schemas build cache
         id: cache-data-schemas
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-schemas/dist
           key: build-data-schemas-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -122,7 +122,7 @@ jobs:
 
       - name: Restore api build cache
         id: cache-api
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/api/dist
           key: build-api-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/api/src/**', 'packages/api/tsconfig*.json', 'packages/api/tsdown.config.mjs', 'packages/api/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json', 'packages/data-schemas/src/**', 'packages/data-schemas/tsconfig*.json', 'packages/data-schemas/tsdown.config.mjs', 'packages/data-schemas/package.json') }}
@@ -132,21 +132,21 @@ jobs:
         run: npm run build:api
 
       - name: Upload data-provider build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-data-provider
           path: packages/data-provider/dist
           retention-days: 2
 
       - name: Upload data-schemas build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-data-schemas
           path: packages/data-schemas/dist
           retention-days: 2
 
       - name: Upload api build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-api
           path: packages/api/dist
@@ -187,7 +187,7 @@ jobs:
       # The commit under test, for the guard spec list, its reader and the reader's check that
       # a selection is not stale. Best effort: without it the select step runs every narrowed
       # workspace FULL, so a failed checkout never fails this job.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         continue-on-error: true
         with:
           persist-credentials: false
@@ -312,16 +312,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -336,19 +336,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download data-schemas build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-schemas
           path: packages/data-schemas/dist
 
       - name: Download api build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-api
           path: packages/api/dist
@@ -381,16 +381,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -432,16 +432,16 @@ jobs:
       BAN_DURATION: ${{ secrets.BAN_DURATION }}
       BAN_INTERVAL: ${{ secrets.BAN_INTERVAL }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -456,19 +456,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download data-schemas build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-schemas
           path: packages/data-schemas/dist
 
       - name: Download api build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-api
           path: packages/api/dist
@@ -524,7 +524,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-api-${{ matrix.shard }}
           path: jest-results/
@@ -539,16 +539,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -563,7 +563,7 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
@@ -598,7 +598,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-data-provider
           path: jest-results/
@@ -613,16 +613,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -637,13 +637,13 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download data-schemas build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-schemas
           path: packages/data-schemas/dist
@@ -686,7 +686,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-data-schemas
           path: jest-results/
@@ -709,16 +709,16 @@ jobs:
       matrix:
         shard: [1, 2, 3, 4]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -733,19 +733,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download data-schemas build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-schemas
           path: packages/data-schemas/dist
 
       - name: Download api build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-api
           path: packages/api/dist
@@ -788,7 +788,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-packages-api-${{ matrix.shard }}
           path: jest-results/
@@ -814,7 +814,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           sparse-checkout: .github/scripts

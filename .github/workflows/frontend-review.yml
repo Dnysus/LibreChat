@@ -69,8 +69,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
           cache: npm
@@ -79,7 +79,7 @@ jobs:
       # entry that every pull request against dev can restore.
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: |
             node_modules
@@ -99,7 +99,7 @@ jobs:
       - name: Save node_modules cache
         if: steps.install-dependencies.outcome == 'success'
         continue-on-error: true
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: |
             node_modules
@@ -149,7 +149,7 @@ jobs:
       # The commit under test, for the guard spec list, its reader and the reader's check that
       # a selection is not stale. Best effort: without it the select step runs every narrowed
       # workspace FULL, so a failed checkout never fails this job.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         continue-on-error: true
         with:
           persist-credentials: false
@@ -253,16 +253,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -278,7 +278,7 @@ jobs:
 
       - name: Restore data-provider build cache
         id: cache-data-provider
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/data-provider/dist
           key: build-data-provider-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -289,7 +289,7 @@ jobs:
 
       - name: Restore client-package build cache
         id: cache-client-package
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: packages/client/dist
           key: build-client-package-${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'packages/client/src/**', 'packages/client/tsconfig*.json', 'packages/client/tsdown.config.mjs', 'packages/client/package.json', 'packages/data-provider/src/**', 'packages/data-provider/tsconfig*.json', 'packages/data-provider/tsdown.config.mjs', 'packages/data-provider/package.json') }}
@@ -304,21 +304,21 @@ jobs:
         run: npm run build:chat
 
       - name: Upload data-provider build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-data-provider
           path: packages/data-provider/dist
           retention-days: 2
 
       - name: Upload client-package build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-client-package
           path: packages/client/dist
           retention-days: 2
 
       - name: Upload chat-package build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-chat-package
           path: packages/chat/dist
@@ -330,16 +330,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -354,19 +354,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download client-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-client-package
           path: packages/client/dist
 
       - name: Download chat-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-chat-package
           path: packages/chat/dist
@@ -387,16 +387,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -411,13 +411,13 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download client-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-client-package
           path: packages/client/dist
@@ -444,16 +444,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -468,7 +468,7 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
@@ -508,7 +508,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-packages-client
           path: jest-results/
@@ -529,16 +529,16 @@ jobs:
       matrix:
         shard: [1, 2]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -553,19 +553,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download client-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-client-package
           path: packages/client/dist
 
       - name: Download chat-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-chat-package
           path: packages/chat/dist
@@ -600,7 +600,7 @@ jobs:
         if: ${{ !cancelled() }}
         timeout-minutes: 3
         continue-on-error: true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jest-results-client-${{ matrix.shard }}
           path: jest-results/
@@ -614,16 +614,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Use Node.js 24.22.3
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '24.22.3'
 
       - name: Restore node_modules cache
         id: cache-node-modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules
@@ -638,19 +638,19 @@ jobs:
         run: npm ci
 
       - name: Download data-provider build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-data-provider
           path: packages/data-provider/dist
 
       - name: Download client-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-client-package
           path: packages/client/dist
 
       - name: Download chat-package build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: build-chat-package
           path: packages/chat/dist
@@ -676,7 +676,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           sparse-checkout: .github/scripts
