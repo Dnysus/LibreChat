@@ -64,7 +64,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.5",
     "@babel/preset-typescript": "^7.21.0",
-    "@langchain/langgraph": "^1.7.2",
+    "@langchain/langgraph": "^1.7.4",
     "@types/bun": "^1.2.15",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.2",
